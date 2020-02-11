@@ -15,6 +15,7 @@ def get_file_name(path):
 def parse_xml(xml_files):
     for file in xml_files:
 
+        urls = []
         file_name = get_file_name(file)
         path = 'output/' + file_name
 
@@ -29,6 +30,12 @@ def parse_xml(xml_files):
 
         with open(path + '/.version', 'w') as f:
             f.write(version_name)
+
+        for url in root:
+            if url.tag == 'url':
+                urls.append(url.text)
+
+        print(urls)
     return
 
 try:
