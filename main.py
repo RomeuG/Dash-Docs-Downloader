@@ -19,13 +19,16 @@ def parse_xml(xml_files):
         path = 'output/' + file_name
 
         try:
-            os.mkdir('output/' + file_name)
+            os.mkdir(path)
         except OSError:
             print(f"Directory {path} already exists.")
 
         tree = ET.parse(file)
         root = tree.getroot()
-        #print(root[0].text)
+        version_name = root[0].text
+
+        with open(path + '/.version', 'w') as f:
+            f.write(version_name)
     return
 
 try:
