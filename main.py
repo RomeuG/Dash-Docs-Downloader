@@ -1,10 +1,22 @@
 import urllib3
 import glob
 import os
+import requests
 
 import xml.etree.ElementTree as ET
 
 output_dir = 'output'
+
+def download_file(url, path):
+    result = False
+
+    with open(path, 'wb') as f:
+        response = requests.get(url)
+        result = response.ok
+        if result == True:
+            f.write(response.content)
+
+    return result
 
 def get_feed_files():
     return glob.glob('./feeds/*.xml')
@@ -35,7 +47,14 @@ def parse_xml(xml_files):
             if url.tag == 'url':
                 urls.append(url.text)
 
-        print(urls)
+        for url in urls:
+            url_file = url.split('/')[-1]
+            file_path = path + '/' + url_file
+            print(f"Downloading {url_file} to {file_path}...")
+            result = download_file(url, file_path)
+            if result == True:
+                break
+
     return
 
 try:
